@@ -7,17 +7,13 @@
 */
 
 // Begin with some standard include files.
-
-#include <algorithm>
 #include <stdio.h>
-//#include <fstream.h>
+#include <algorithm>
 #include <fstream>
-//#include <complex.h>
 #include <complex>
 #include <time.h>
 
 using namespace std;
-
 
 #include <math.h>
 #include <complex>
@@ -25,8 +21,6 @@ using namespace std;
 
 
 #include "eigs_umfpack.h"
-
-//#include "slu_zdefs.h"
 #include "umfpack.h"
 
 
@@ -118,53 +112,6 @@ void zcopy_x_to_workd(int n, const double *Xx, const double *Xz, complex<double>
 		workd[i]._Val[0] = Xx[i];
 		workd[i]._Val[1] = Xz[i];
 	}
-}
-
-/**
-qsort, partition for complex 
-cout(r) == count(c) == count(val)
-*/
-
-void swap_(int *r, int *c, complex<double> *val, int left, int right)
-{
-	swap(r[left], r[right]);
-	swap(c[left], c[right]);
-	swap(val[left], val[right]);
-}
-
-int partition_(int n, int *r, int *c, 
-	complex<double> *val, int left, int right)
-{
-	int index = left;
-	int i = r[index];
-	int j = c[index];
-	long long idx_col = (long long)j*(long long)n+(long long)i, idx_col_1 = 0;
-	int i_1 = 0, j_1 = 0;
-
-	swap_(r, c, val, index, right);
-	for (int k = left; k < right; k++) {
-		i_1 = r[k];
-		j_1 = c[k];
-		idx_col_1 = (long long)j_1*(long long)n+(long long)i_1;
-		if (idx_col_1 < idx_col) { //ascending order
-			swap_(r, c, val, index, k);
-			index++;
-		}
-
-	}
-	swap_(r, c, val, right, index);
-	return index;
-}
-
-void qsort_(int n, int *r, int *c, 
-	complex<double> *val, int left, int right) 
-{
-	if (left >= right) {
-		return;
-	}
-	int index = partition_(n, r, c, val, left, right);
-	qsort_(n, r, c, val, left, index - 1);
-	qsort_(n, r, c, val, index + 1, right);
 }
 
 void arpack_znaupd(int *Ap, int *Ai, double *Ax, double *Az, double *Control,
